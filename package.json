@@ -1,7 +1,7 @@
 {
-  "name": "ynab-api-starter-kit",
+  "name": "ynab-legio",
   "version": "1.0.2",
-  "description": "To quickly get started building an App with the YNAB API.",
+  "description": "YNAB Legio. A Multicurrency approach to YNAB budggeting.",
   "bin": "bin/start.js",
   "scripts": {
     "start": "webpack-dev-server --open --hot",
