@@ -1,13 +1,9 @@
-# YNAB API Starter Kit
+# YNAB Legio.  A Multicurrency approach to YNAB budggeting 
 
-Want to build a web app with the [YNAB API](https://api.youneedabudget.com/) but
-not sure how to get started?
-
-Try this YNAB API Starter Kit!
 
 ## Demo
 
-View a [live demo](https://ynab.github.io/ynab-api-starter-kit/) of what this project
+View a [live demo](https://sclark2006.github.io/ynab-legio/) of what this project
 will start off looking like or take a look below.
 
 ![kapture 2018-03-28 at 12 37 23](https://user-images.githubusercontent.com/759811/38046244-c9806f0a-3284-11e8-8788-509912ec79c2.gif)
@@ -15,7 +11,7 @@ will start off looking like or take a look below.
 ## Usage
 
 * Install [Node.js](https://nodejs.org/).
-* In your terminal, run `npx ynab-api-starter-kit my-ynab-app`
+* In your terminal, run `npx ynab-legio my-ynab-app`
 
 This will:
 * Create a copy of this project on your computer.
@@ -26,7 +22,7 @@ This will:
 
 If you're looking for a little less magic:
 
-* Use git to clone it: `git clone https://github.com/ynab/ynab-api-starter-kit`
+* Use git to clone it: `git clone https://github.com/ynab/ynab-legio`
 * From within the folder, run `npm install`
 * Then run `npm start`
 
@@ -54,14 +50,14 @@ Runs the development server (defaults to `localhost:8080`) and watches for chang
 Builds the production assets for deployment. This will build to `dist/build.js`
 which the `index.html` will load.
 
-### [`src/App.vue`](https://github.com/ynab/ynab-api-starter-kit/blob/gh-pages/src/App.vue)
+### [`src/App.vue`](https://github.com/ynab/ynab-legio/blob/gh-pages/src/App.vue)
 
 In the script portion of this page, you can see how to build an OAuth URI to
 obtain an access token for the API.
 
 It also has some examples on retrieving budgets and transactions.
 
-### [`src/Transactions.vue`](https://github.com/ynab/ynab-api-starter-kit/blob/gh-pages/src/components/Transactions.vue)
+### [`src/Transactions.vue`](https://github.com/ynab/ynab-legio/blob/gh-pages/src/components/Transactions.vue)
 
 This displays all the transactions when you've got them. It also has an example
 of using `utils.convertMilliUnitsToCurrencyAmount` to convert the milliunits that
@@ -69,13 +65,13 @@ YNAB uses into the currency format of the budget.
 
 ## Deployment
 
-<a href="https://heroku.com/deploy?template=https://github.com/ynab/ynab-api-starter-kit">
+<a href="https://heroku.com/deploy?template=https://github.com/ynab/ynab-legio">
   <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy">
 </a>
 
 ### GitHub Pages
 If you have a GitHub account, fork this repo. You can now modify your fork, run
-`npm run build`, commit and push the code. Your app will be live on `https://[yourgithubacccount].github.io/ynab-api-starter-kit/`.
+`npm run build`, commit and push the code. Your app will be live on `https://[yourgithubacccount].github.io/ynab-legio/`.
 
 ## License
 
