@@ -1,29 +1,58 @@
 {
-  "name": "ynab-api-starter-kit",
-  "version": "1.0.2",
-  "description": "To quickly get started building an App with the YNAB API.",
-  "bin": "bin/start.js",
-  "scripts": {
-    "start": "webpack-dev-server --open --hot",
-    "build": "NODE_ENV='production' webpack --progress --hide-modules"
+  "_from": "ynab-api-starter-kit@latest",
+  "_id": "ynab-api-starter-kit@1.0.2",
+  "_inBundle": false,
+  "_integrity": "sha512-5FJHTjQAyXmnKjsqmHVQvmBVNIMA0UkwrdtAh4WnV0akzVpA2/1VJh3zl9hJoyMbTOX+Jv8NpIJxZcIq4tHHhg==",
+  "_location": "/ynab-api-starter-kit",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "ynab-api-starter-kit@latest",
+    "name": "ynab-api-starter-kit",
+    "escapedName": "ynab-api-starter-kit",
+    "rawSpec": "latest",
+    "saveSpec": null,
+    "fetchSpec": "latest"
   },
-  "author": "You Need a Budget, LLC",
-  "license": "Apache-2.0",
+  "_requiredBy": [
+    "#USER"
+  ],
+  "_resolved": "https://registry.npmjs.org/ynab-api-starter-kit/-/ynab-api-starter-kit-1.0.2.tgz",
+  "_shasum": "f3a1e37cb4c6bf45776e58ac60785a81495ea4a3",
+  "_spec": "ynab-api-starter-kit@latest",
+  "_where": "C:\\Dev\\MyDevs",
+  "author": {
+    "name": "You Need a Budget, LLC"
+  },
+  "bin": {
+    "ynab-api-starter-kit": "bin/start.js"
+  },
+  "bundleDependencies": false,
   "dependencies": {
     "chalk": "^4.0.0",
     "cpr": "^3.0.1"
   },
+  "deprecated": false,
+  "description": "To quickly get started building an App with the YNAB API.",
   "devDependencies": {
     "css-loader": "^3.5.3",
     "npm-check-updates": "^4.1.2",
     "vue": "2.6.11",
     "vue-loader": "^15.9.2",
-    "vue-server-renderer": "^2.6.12",
+    "vue-server-renderer": "2.6.11",
     "vue-template-compiler": "2.6.11",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.10.3",
     "xhr": "^2.5.0",
     "ynab": "^1.19.0"
-  }
+  },
+  "license": "Apache-2.0",
+  "name": "ynab-api-starter-kit",
+  "scripts": {
+    "build": "NODE_ENV='production' webpack --progress --hide-modules",
+    "start": "webpack-dev-server --open --hot"
+  },
+  "version": "1.0.2"
 }

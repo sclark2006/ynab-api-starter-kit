@@ -8,17 +8,7 @@ will start off looking like or take a look below.
 
 ![kapture 2018-03-28 at 12 37 23](https://user-images.githubusercontent.com/759811/38046244-c9806f0a-3284-11e8-8788-509912ec79c2.gif)
 
-## Usage
-
-* Install [Node.js](https://nodejs.org/).
-* In your terminal, run `npx ynab-legio my-ynab-app`
-
-This will:
-* Create a copy of this project on your computer.
-* Install all the dependencies.
-* Start up the server ready for development.
-
-### Alternatively
+### Usage
 
 If you're looking for a little less magic:
 
