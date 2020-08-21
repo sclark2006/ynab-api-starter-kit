@@ -12,7 +12,7 @@ will start off looking like or take a look below.
 
 If you're looking for a little less magic:
 
-* Use git to clone it: `git clone https://github.com/ynab/ynab-legio`
+* Use git to clone it: `git clone https://github.com/sclark2006/ynab-legio`
 * From within the folder, run `npm install`
 * Then run `npm start`
 

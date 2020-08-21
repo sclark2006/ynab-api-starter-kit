@@ -40,7 +40,8 @@
 
         <!-- If a budget has been selected, display transactions from that budget -->
         <div v-else>
-          <Transactions :transactions="transactions" />
+          <!-- <Transactions :transactions="transactions" /> -->
+          <Accounts :accounts="accounts" />
           <button class="btn btn-info" @click="budgetId = null">&lt; Select Another Budget</button>
         </div>
 
@@ -62,6 +63,7 @@ import config from './config.json';
 import Nav from './components/Nav.vue';
 import Footer from './components/Footer.vue';
 import Budgets from './components/Budgets.vue';
+import Accounts from './components/Accounts.vue';
 import Transactions from './components/Transactions.vue';
 
 export default {
@@ -78,6 +80,7 @@ export default {
       error: null,
       budgetId: null,
       budgets: [],
+      accounts: [],
       transactions: [],
     }
   },
@@ -113,13 +116,22 @@ export default {
       this.error = null;
       this.budgetId = id;
       this.transactions = [];
-      this.api.transactions.getTransactions(id).then((res) => {
-        this.transactions = res.data.transactions;
+      this.accounts = [];
+      this.api.accounts.getAccounts(id).then(response => {
+        this.accounts = response.data.accounts;
       }).catch((err) => {
         this.error = err.error.detail;
       }).finally(() => {
         this.loading = false;
       });
+
+      // this.api.transactions.getTransactions(id).then((res) => {
+      //   this.transactions = res.data.transactions;
+      // }).catch((err) => {
+      //   this.error = err.error.detail;
+      // }).finally(() => {
+      //   this.loading = false;
+      // });
     },
     // This builds a URI to get an access token from YNAB
     // https://api.youneedabudget.com/#outh-applications
@@ -159,6 +171,7 @@ export default {
     Nav,
     Footer,
     Budgets,
+    Accounts,
     Transactions
   }
 }
