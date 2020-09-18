@@ -31,7 +31,8 @@
   "bundleDependencies": false,
   "dependencies": {
     "chalk": "^4.0.0",
-    "cpr": "^3.0.1"
+    "cpr": "^3.0.1",
+    "vue-fragment": "^1.5.1"
   },
   "deprecated": false,
   "description": "To quickly get started building an App with the YNAB API.",
