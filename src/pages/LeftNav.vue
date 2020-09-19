@@ -26,8 +26,8 @@
                 data-toggle="pill" href="#all-accounts" role="tab" aria-controls="all-accounts" aria-selected="false">All Accounts</a>
             </li>            
             <account-group name="Budget" :accounts="getBudgetAccounts" :selectView="selectView" />
-            <!-- <account-group name="Tracking" />
-            <account-group name="Closed" /> -->
+            <account-group name="Tracking" :accounts="getTrackingAccounts" :selectView="selectView" />
+            <account-group name="Closed" :accounts="getClosedAccounts" :selectView="selectView" />
         </ul>
         
   </div>
@@ -46,9 +46,20 @@ export default {
     },
     computed: {
         getBudgetAccounts() {
-            if(this.budget != null)
-            var result = this.budget.accounts.filter(x => x.on_budget === true && !x.closed);
-            return result;
+            if(this.budget == null)
+                return [];
+            return this.budget.accounts.filter(x => x.on_budget && !x.closed);
+        },
+         getTrackingAccounts() {
+            if(this.budget == null)
+                return [];
+            return this.budget.accounts.filter(x => !x.on_budget && !x.closed);
+
+        },
+        getClosedAccounts() {
+            if(this.budget == null)
+                return [];
+            return this.budget.accounts.filter(x => x.closed);
         }
 
     },

@@ -21,7 +21,7 @@ import auth from "../utils/auth.js";
 export default {
     props: ["config"],
     computed: {
-      requiresAuthorization() {
+      requiresAuthorization(config) {
         return !this.config.token || this.config.token == null;
       }
     },

@@ -1,10 +1,11 @@
 <template>
   <div>
-    <h5>Transactions</h5>
+    <h5 v-if="showAll">All Accounts</h5>
+    <h5 v-else>{{getAccountName}}</h5>
     <table class="table">
     <thead>
       <tr>
-        <th v-if="!account">Account</th>
+        <th v-if="showAll">Account</th>
         <th>Date</th>
         <th>Payee</th>
         <th>Category</th>
@@ -14,7 +15,7 @@
     </thead>
     <tbody>
       <tr v-for="transaction in getTransactions" v-bind:key="transaction.id">
-        <td v-if="!account">{{transaction.account_name}}</td>
+        <td v-if="showAll">{{transaction.account_name}}</td>
         <td>{{transaction.date}}</td>
         <td>{{transaction.payee_name}}</td>
         <td>{{transaction.category_name}}</td>
@@ -40,21 +41,24 @@ export default {
       account : null
     }
   },
+
   computed: {
+    getAccountName() {
+      if(this.viewState)
+        this.account = this.budget.accounts.find(x => x.id == this.viewState.id);
+      return this.account.name;
+    },
+    showAll() {
+      return !this.viewState || !this.viewState.id;
+    },
     getTransactions() {
         if(!this.budget || this.budget == null)
           return [];
 
-        if(!this.viewState)
-          return this.budget.transactions;
-
-        if(!this.account || this.account.id != this.viewState.id)
-          this.account = this.budget.accounts.find(x => x.id == this.viewState.id);
-
-        if(this.account)
+        if( !this.viewState)
+          return this.budget.transactions.slice(0,100);
+        else 
           return this.budget.transactions.filter(x => x.account_id == this.viewState.id);
-        else
-          return []; 
         }
         
   },

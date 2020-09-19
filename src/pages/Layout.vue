@@ -1,5 +1,5 @@
 <template>
-    <div id="layout" class="col-12">
+    <div id="layout" class="col-12 wrapper">
         <Nav />
         <!-- Display a loading message if loading -->
         <h1 v-if="loading" class="display-4">Loading...</h1>
@@ -17,6 +17,9 @@
   </div>
 </template>
 <script>
+
+import auth from "../utils/auth.js";
+
 // Hooray! Here comes YNAB!
 import * as ynab from 'ynab';
 
@@ -57,29 +60,34 @@ export default {
   // When this component is created, check whether we need to get a token,
   // budgets or display the transactions
   created() {
-    this.ynab.token = this.findYNABToken();
+    this.ynab.token = auth.findYNABToken();
     if (this.ynab.token) {
       this.api = new ynab.api(this.ynab.token);
       if(!this.currentBudget) {
-        this.getLastUsedBudget();
+        this.loadLastUsedBudget();
       }
     }
   },
-  computed: {
-    requiresAuthorization() {
-      return !this.ynab.token || this.ynab.token == null;
-    }
-  },
   methods: {
-    getLastUsedBudget() {
+    selectView(view, id) {
+      this.viewState = {'currentView': view, 'id': id };
+     },    
+    loadLastUsedBudget() {
       this.loading = true;
       this.error = null;
       this.api.budgets.getBudgetById('last-used').then((res) => {
         this.currentBudget = res.data.budget;
-      }).catch((err) => {
+        return Promise.resolve(this.currentBudget);
+      }).then(x => this.loadTransactions(x))
+      .catch((err) => {
         this.error = err.error.detail;
       }).finally(() => {
         this.loading = false;
+      });
+    },
+    loadTransactions(budget) {
+      this.api.transactions.getTransactions(budget.id).then((res) => {
+        budget.transactions = res.data.transactions;
       });
     },
     // This uses the YNAB API to get a list of budgets
@@ -109,36 +117,9 @@ export default {
         this.loading = false;
       });
 
-      // this.api.transactions.getTransactions(id).then((res) => {
-      //   this.transactions = res.data.transactions;
-      // }).catch((err) => {
-      //   this.error = err.error.detail;
-      // }).finally(() => {
-      //   this.loading = false;
-      // });
     },
-    selectView(view, id) {
-      this.viewState = {'currentView': view, 'id': id };
-     },
-    // Method to find a YNAB token
-    // First it looks in the location.hash and then sessionStorage
-    findYNABToken() {
-      let token = null;
-      const search = window.location.hash.substring(1).replace(/&/g, '","').replace(/=/g,'":"');
-      if (search && search !== '') {
-        // Try to get access_token from the hash returned by OAuth
-        const params = JSON.parse('{"' + search + '"}', function(key, value) {
-          return key === '' ? value : decodeURIComponent(value);
-        });
-        token = params.access_token;
-        sessionStorage.setItem('ynab_access_token', token);
-        window.location.hash = '';
-      } else {
-        // Otherwise try sessionStorage
-        token = sessionStorage.getItem('ynab_access_token');
-      }
-      return token;
-    },
+   
+
     // Clear the token and start authorization over
     resetToken() {
       sessionStorage.removeItem('ynab_access_token');
