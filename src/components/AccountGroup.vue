@@ -24,7 +24,7 @@ export default {
     props: ["name","accounts","selectView"],
     data() {
         return {
-            collapsed: false
+            collapsed: true
 
         }
     },

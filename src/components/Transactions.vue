@@ -1,11 +1,12 @@
 <template>
   <div>
     <h5 v-if="showAll">All Accounts</h5>
-    <h5 v-else>{{getAccountName}}</h5>
+    <h5 v-else>{{account.name}}</h5>
     <table class="table">
     <thead>
       <tr>
         <th v-if="showAll">Account</th>
+        <th>Flag</th>
         <th>Date</th>
         <th>Payee</th>
         <th>Category</th>
@@ -14,8 +15,9 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="transaction in getTransactions" v-bind:key="transaction.id">
+      <tr v-for="transaction in transactions" v-bind:key="transaction.id">
         <td v-if="showAll">{{transaction.account_name}}</td>
+        <td><font-awesome-icon icon="flag" :class="(transaction.flag_color || 'noflag')"/> </td>
         <td>{{transaction.date}}</td>
         <td>{{transaction.payee_name}}</td>
         <td>{{transaction.category_name}}</td>
@@ -38,20 +40,19 @@ export default {
   },
   data() {
     return {
-      account : null
     }
   },
 
   computed: {
-    getAccountName() {
-      if(this.viewState)
-        this.account = this.budget.accounts.find(x => x.id == this.viewState.id);
-      return this.account.name;
+    account() {
+      if(!this.viewState) return {};
+
+      return this.budget.accounts.find(x => x.id == this.viewState.id);
     },
     showAll() {
       return !this.viewState || !this.viewState.id;
     },
-    getTransactions() {
+    transactions() {
         if(!this.budget || this.budget == null)
           return [];
 

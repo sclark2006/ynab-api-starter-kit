@@ -46,14 +46,28 @@ export default {
       return this.budget.months.find(m => new Date().getUTCMonth() === new Date(m.month).getUTCMonth() );
     },
     visibleCategories() {
-      if(!this.currentMonth)
-        return [];
-      return this.currentMonth.categories.filter(c => !c.deleted && !c.hidden );
-    }
+      //return this.currentMonth.categories.filter(c => !c.deleted && !c.hidden );
+      return this.categoryGroups();
+    },
+
   },
   methods: {
-    // Now we can make this method available to our template
-    // So we can format this milliunits in the correct currency format
+    categoryGroups() {
+      if(!this.budget) return [];
+      let result = [];
+      this.budget.category_groups.filter(c => !c.deleted && !c.hidden ).forEach(group => {
+         var groupCategories = group.categories.filter(c => !c.deleted && !c.hidden );
+         var goal_target = groupCategories.map(x => x.goal_target).reduce((a,b) => a + b,0);
+         var budgeted = groupCategories.map(x => x.budgeted).reduce((a,b) => a + b,0);
+         var activity = groupCategories.map(x => x.activity).reduce((a,b) => a + b,0);
+         var balance = groupCategories.map(x => x.balance).reduce((a,b) => a + b,0);
+        result.push({ id: group.id, name: group.name, hidden: group.hidden, deleted: group.deleted,
+                     goal_target: goal_target, budgeted: budgeted, activity: activity, balance: balance
+                    });
+        result = result.concat(groupCategories);
+      });
+      return result;
+    },
     toCurrency: utils.convertMilliUnitsToCurrencyAmount
   }
 

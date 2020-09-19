@@ -4,13 +4,14 @@
                   <!-- Budget Selector -->
             <li class="nav-item dropdown ">
                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" 
-                    href="#" role="button" aria-haspopup="true" aria-expanded="false">Nombre Presupuesto</a>
+                    href="#" role="button" aria-haspopup="true" aria-expanded="false">{{budget.name}}</a>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
-                    <a class="dropdown-item" href="#">Something else here</a>
+                    <a  href="#" v-for="b in allBudgets" v-bind:key="b.id"  
+                        @click="selectBudget(b.id, $event)" class="dropdown-item">
+                        {{b.name}}
+                    </a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Separated link</a>
+                    <a class="dropdown-item" href="#"   @click="logout" >Logout</a>
                 </div>
             </li>
             <li class="nav-item">
@@ -36,29 +37,34 @@
 import AccountGroup from '../components/AccountGroup.vue';
 
 export default {
-    props: ["budget","selectView"],
+    props: ["budgetData","selectView", "selectBudget","logout"],
     data() {
         return {
+            accounts: null,
         }
     },
+
     methods: {
 
     },
     computed: {
+        budget() {
+            return this.budgetData.currentBudget || {
+                name:"",
+                accounts: []
+            };
+        },
+        allBudgets() {
+            return this.budgetData.budgets;
+        },
         getBudgetAccounts() {
-            if(this.budget == null)
-                return [];
             return this.budget.accounts.filter(x => x.on_budget && !x.closed);
         },
          getTrackingAccounts() {
-            if(this.budget == null)
-                return [];
             return this.budget.accounts.filter(x => !x.on_budget && !x.closed);
 
         },
         getClosedAccounts() {
-            if(this.budget == null)
-                return [];
             return this.budget.accounts.filter(x => x.closed);
         }
 

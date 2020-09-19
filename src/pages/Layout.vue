@@ -4,13 +4,13 @@
         <!-- Display a loading message if loading -->
         <h1 v-if="loading" class="display-4">Loading...</h1>
         <!-- Display an error if we got one -->
-        <div v-if="error">
+        <div v-else-if="error">
             <h1 class="display-4">Oops!</h1>
             <p class="lead">{{error}}</p>
             <button class="btn btn-primary" @click="resetToken">Try Again &gt;</button>
         </div>
-        <Authorization :config="ynab">
-          <LeftNav :budget="currentBudget" :selectView="selectView" />
+        <Authorization v-else :config="ynab">
+          <LeftNav :budgetData="budgetData" :selectView="selectView" :selectBudget="loadBudget" :logout="resetToken" />
           <PageContent :budget="currentBudget" :viewState="viewState" />          
         </Authorization>
         <Footer />
@@ -32,8 +32,6 @@ import LeftNav from './LeftNav.vue';
 import PageContent from './Content.vue';
 import Nav from '../components/Nav.vue';
 import Footer from '../components/Footer.vue';
-import Budgets from '../components/Budgets.vue';
-import Accounts from '../components/Accounts.vue';
 
 export default {
   // The data to feed our templates
@@ -47,6 +45,13 @@ export default {
       },
       loading: false,
       error: null,
+      budgetData: {
+        budgetId: null,
+        currentBudget: null,
+        budgets: [],
+        accounts: [],
+        transactions: [],
+      },
       budgetId: null,
       currentBudget: null,
       budgets: [],
@@ -64,7 +69,8 @@ export default {
     if (this.ynab.token) {
       this.api = new ynab.api(this.ynab.token);
       if(!this.currentBudget) {
-        this.loadLastUsedBudget();
+        this.loadAllBudgets();
+        this.loadBudget('last-used');
       }
     }
   },
@@ -72,53 +78,53 @@ export default {
     selectView(view, id) {
       this.viewState = {'currentView': view, 'id': id };
      },    
-    loadLastUsedBudget() {
+    loadBudget(id) {
       this.loading = true;
       this.error = null;
-      this.api.budgets.getBudgetById('last-used').then((res) => {
+      this.api.budgets.getBudgetById(id).then((res) => {
+        res.data.budget.category_groups = [];
         this.currentBudget = res.data.budget;
-        return Promise.resolve(this.currentBudget);
-      }).then(x => this.loadTransactions(x))
+        this.budgetData.currentBudget = res.data.budget;
+        return Promise.resolve(this.budgetData);
+      })
+      .then(x => this.loadTransactions(x))
+      .then(x => this.loadCategories()) 
       .catch((err) => {
         this.error = err.error.detail;
       }).finally(() => {
         this.loading = false;
       });
     },
-    loadTransactions(budget) {
-      this.api.transactions.getTransactions(budget.id).then((res) => {
-        budget.transactions = res.data.transactions;
+    loadTransactions(data) {
+     this.api.transactions.getTransactions(data.currentBudget.id).then((res) => {
+       //let response = res.data.transactions.reverse();
+       let response = res.data.transactions.map(t => {
+         if(t.category_name == "Immediate Income SubCategory")
+            t.category_name = "Inflow: To be Budgeted";
+         return t;
+       });
+       response.sort((a,b) => new Date(b.date).getTime() - new Date(a.date).getTime() )
+       
+        data.currentBudget.transactions = response;
       });
     },
-    // This uses the YNAB API to get a list of budgets
-    getBudgets() {
+    loadCategories() {
+     this.api.categories.getCategories(this.budgetData.currentBudget.id).then((res) => {
+        this.budgetData.currentBudget.category_groups = res.data.category_groups;
+        this.currentBudget.category_groups = res.data.category_groups;
+      });
+    },
+    loadAllBudgets() {
       this.loading = true;
       this.error = null;
-      this.api.budgets.getBudgets().then((res) => {
-        this.budgets = res.data.budgets;
+      this.api.budgets.getBudgets(false).then((res) => {
+        this.budgetData.budgets = res.data.budgets;
       }).catch((err) => {
         this.error = err.error.detail;
       }).finally(() => {
         this.loading = false;
       });
     },
-    // This selects a budget and gets all the transactions in that budget
-    selectBudget(id) {
-      this.loading = true;
-      this.error = null;
-      this.budgetId = id;
-      this.transactions = [];
-      this.accounts = [];
-      this.api.accounts.getAccounts(id).then(response => {
-        this.accounts = response.data.accounts;
-      }).catch((err) => {
-        this.error = err.error.detail;
-      }).finally(() => {
-        this.loading = false;
-      });
-
-    },
-   
 
     // Clear the token and start authorization over
     resetToken() {
@@ -134,8 +140,6 @@ export default {
     PageContent,
     Nav,
     Footer,
-    Budgets,
-    Accounts,
   }
 }
 </script>
