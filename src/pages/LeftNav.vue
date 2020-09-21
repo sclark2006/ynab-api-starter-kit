@@ -19,6 +19,10 @@
                 data-toggle="pill" href="#budget" role="tab" aria-controls="budget" aria-selected="true">Budget</a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" @click="selectView('rates')" id="rates-tab" 
+                data-toggle="pill" href="#rates" role="tab" aria-controls="rates" aria-selected="true">Exchange Rates</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" @click="selectView('reports')" id="reports-tab" 
                 data-toggle="pill" href="#reports" role="tab" aria-controls="reports" aria-selected="false">Reports</a>
             </li>

@@ -9,8 +9,8 @@
          <a v-show="!collapsed" v-for="acc in accounts" v-bind:key="acc.id" class="nav-link" @click='showAccount(acc.id)' 
          data-toggle="pill" href="#account-transactions" role="tab" aria-selected="false">
             <div class="row">
-                <span class="col-6 text-left">{{acc.name}}</span>
-                <span class="col-6 currency text-right">{{toCurrency(acc.balance).toFixed(2)}}</span>
+                <span class="col-7 text-left">{{acc.name}}</span>
+                <span class="col-5 currency text-right">{{toCurrency(acc.balance).toFixed(2)}}</span>
             </div>         
          </a>
     </li>
