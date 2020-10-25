@@ -22,7 +22,7 @@
         <td>{{transaction.payee_name}}</td>
         <td>{{transaction.category_name}}</td>
         <td>{{transaction.memo}}</td>
-        <td>{{toCurrency(transaction.amount).toFixed(2)}}</td>
+        <td class="currency text-right" v-bind:class="{ 'red': transaction.amount < 0 }">{{millisToCurrency(transaction.amount)}}</td>
       </tr>
     </tbody>
     </table>
@@ -30,8 +30,8 @@
 </template>
 
 <script>
-// Import utils from YNAB
-import {utils} from 'ynab';
+import {millisToCurrency} from '../utils/formatting.js';
+
 
 export default {
   props: {
@@ -66,7 +66,7 @@ export default {
   methods: {
     // Now we can make this method available to our template
     // So we can format this milliunits in the correct currency format
-    toCurrency: utils.convertMilliUnitsToCurrencyAmount
+    millisToCurrency: millisToCurrency
   }
 
 }

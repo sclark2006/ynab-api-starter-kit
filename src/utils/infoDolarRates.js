@@ -1,5 +1,5 @@
 import cheerio from 'cheerio';
-import currency from './currency.min.js';
+import {toCurrency} from './formatting.js';
 
 export function loadRates() {
     return fetch('https://cors-anywhere.herokuapp.com/https://www.infodolar.com.do', {
@@ -25,8 +25,10 @@ export function loadRates() {
                     selling_rate : $(rowData[headers['venta']]).data("order").trim(),
                     last_updated : $(rowData[rowData.length - 1]).text(),
                 };                
-                rate.buying_rate = currency(rate.buying_rate, { decimal: '.', separator: ',' }).format();
-                rate.selling_rate =  currency(rate.selling_rate, { decimal: '.', separator: ',' }).format();
+                //rate.buying_rate = currency(rate.buying_rate, { decimal: '.', separator: ',' }).format();
+                //rate.selling_rate =  currency(rate.selling_rate, { decimal: '.', separator: ',' }).format();
+                rate.buying_rate = toCurrency(rate.buying_rate);
+                rate.selling_rate = toCurrency(rate.selling_rate);
                 infoDolarData[index] = rate;
             });
 

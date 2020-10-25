@@ -10,7 +10,8 @@
          data-toggle="pill" href="#account-transactions" role="tab" aria-selected="false">
             <div class="row">
                 <span class="col-7 text-left">{{acc.name}}</span>
-                <span class="col-5 currency text-right">{{toCurrency(acc.balance).toFixed(2)}}</span>
+                <span class="col-5 currency text-right" v-bind:class="{ 'red': acc.balance < 0 }">
+                    {{millisToCurrency(acc.balance)}}</span>
             </div>         
          </a>
     </li>
@@ -18,7 +19,7 @@
 
 <script>
 
-import {utils} from 'ynab';
+import {millisToCurrency} from '../utils/formatting.js';
 
 export default {
     props: ["name","accounts","selectView"],
@@ -35,7 +36,7 @@ export default {
         showAccount(id) {
             this.selectView('account', id);
         },
-        toCurrency: utils.convertMilliUnitsToCurrencyAmount
+        millisToCurrency: millisToCurrency 
     },
     computed: {
         upperCaseName() {
@@ -43,8 +44,8 @@ export default {
         },
         groupTotal() {
             if(!this.accounts || this.accounts.length == 0) return 0.00;
-            return this.toCurrency(this.accounts.map(x => x.balance).
-                    reduce((a,b) => a + b).toFixed(2));
+            return this.millisToCurrency(this.accounts.map(x => x.balance).
+                    reduce((a,b) => a + b));
         }
 
     }
