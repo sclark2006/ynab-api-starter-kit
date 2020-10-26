@@ -1,7 +1,12 @@
 <template>
   <div>
     <h5 v-if="showAll">All Accounts</h5>
-    <h5 v-else>{{account.name}}</h5>
+    <h5 v-else>{{account.name}}     
+      <button type="button" class="btn " @click="showEditModal"> 
+        <font-awesome-icon icon="edit" />
+      </button>
+    </h5>
+
     <table class="table">
     <thead>
       <tr>
@@ -26,11 +31,14 @@
       </tr>
     </tbody>
     </table>
+    <account-edit-modal :account="account" v-show="isEditModalVisible" @close="closeEditModal"  />
+
   </div>
 </template>
 
 <script>
 import {millisToCurrency} from '../utils/formatting.js';
+import AccountEditModal from './AccountEditModal.vue';
 
 
 export default {
@@ -40,12 +48,13 @@ export default {
   },
   data() {
     return {
+      isEditModalVisible: false
     }
   },
 
   computed: {
     account() {
-      if(!this.viewState) return {};
+      if(!this.viewState || !this.budget) return {};
 
       return this.budget.accounts.find(x => x.id == this.viewState.id);
     },
@@ -66,8 +75,18 @@ export default {
   methods: {
     // Now we can make this method available to our template
     // So we can format this milliunits in the correct currency format
-    millisToCurrency: millisToCurrency
-  }
+    millisToCurrency: millisToCurrency,
+    showEditModal() {
+      this.isEditModalVisible = true;
+    },
+    closeEditModal() {
+      this.isEditModalVisible = false;
+    }
+  },
+      components: {
+        AccountEditModal
+
+    }
 
 }
 </script>
