@@ -6,7 +6,7 @@
                 <input type="text" v-model="account.name" class="form-control" id="account-name" aria-describedby="account-name-help">
                 <!-- <small id="account-name-help" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
             </div>
-            <div class="form-group">
+            <div class="form-group" v-if="account.type">
                 <label for="account-type">Account Type </label>
                 <input type="text" :value="account.type.toUpperCase()" readonly class="form-control" id="account-type" aria-describedby="account-type-help">
                 <!-- <small id="account-name-help" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
