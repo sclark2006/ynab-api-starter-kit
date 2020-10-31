@@ -1,0 +1,12 @@
+.red {
+    color: red;
+  }
+  .green {
+    color: limegreen;
+  }
+  .noflag {
+    color: lightgrey;
+  }
+  .category-group {
+    font-weight: bold;
+  }
