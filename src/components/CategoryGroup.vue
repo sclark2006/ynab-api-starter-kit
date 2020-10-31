@@ -2,7 +2,9 @@
 <fragment>
     <tr class="category-group">
         <td>
-        <a href="#" @click="toggleCollapse"><font-awesome-icon :icon="chevronIcon" /> </a>
+            <span @click="toggleCollapse">
+                <font-awesome-icon :icon="chevronIcon" /> 
+            </span>
             {{group.name }}
         </td>
         <td class="currency text-right">{{goal_target}}</td>      
@@ -33,6 +35,7 @@ export default {
         }
     },
     computed: {
+        //@TODO: Only pass in props the categories that belongs to this group.
         groupCategories() {
             if(!this.group) return [];
             return this.categories.filter(x => x.category_group_id == this.group.id );
