@@ -19,7 +19,7 @@
 
 <script>
 
-import {millisToCurrency} from '../utils/formatting.js';
+import {millisToCurrency, sumToCurrency} from '../utils/formatting.js';
 
 export default {
     props: ["name","accounts","selectView"],
@@ -35,7 +35,8 @@ export default {
         showAccount(id) {
             this.selectView('account', id);
         },
-        millisToCurrency: millisToCurrency 
+        millisToCurrency: millisToCurrency,
+        sum: sumToCurrency
     },
     computed: {
         upperCaseName() {
@@ -43,8 +44,7 @@ export default {
         },
         groupTotal() {
             if(!this.accounts || this.accounts.length == 0) return 0.00;
-            return this.millisToCurrency(this.accounts.map(x => x.balance).
-                    reduce((a,b) => a + b));
+            return this.sum(this.accounts.map(x => x.balance));
         }
 
     }

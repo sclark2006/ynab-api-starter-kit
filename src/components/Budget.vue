@@ -9,15 +9,15 @@
     <thead>
       <tr>
         <th>Category</th>
-        <th>Goal</th>
-        <th>Budgeted</th>
-        <th>Activity</th>
-        <th>Balance</th>
+        <th class="text-right">Goal</th>
+        <th class="text-right">Budgeted</th>
+        <th class="text-right">Activity</th>
+        <th class="text-right">Balance</th>
       </tr>
     </thead>
     <tbody>
       <template v-for="group in categoryGroups">
-        <category-group v-bind:key="group.id" :group="group" :categories="monthCategories"></category-group>
+        <category-group v-bind:key="group.id" :group="group" :categories="getMonthCategories(group)"></category-group>
       </template>
       
     </tbody>
@@ -73,6 +73,9 @@ export default {
         this.selectedMonth = budgetMonth;
       }
     },
+    getMonthCategories(group) {
+      return this.monthCategories.filter(x => x.category_group_id == group.id);
+    }
   },
   components: {CategoryGroup}
 

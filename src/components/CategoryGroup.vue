@@ -35,10 +35,9 @@ export default {
         }
     },
     computed: {
-        //@TODO: Only pass in props the categories that belongs to this group.
         groupCategories() {
             if(!this.group) return [];
-            return this.categories.filter(x => x.category_group_id == this.group.id );
+            return this.categories;
         },
         chevronIcon() {
             return this.isCollapsed ? "chevron-right":"chevron-down";

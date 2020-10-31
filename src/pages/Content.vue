@@ -1,6 +1,6 @@
 <template>
     <div class="container-lg container-md">
-        <div class="col-12 ">
+        <div class="col-12">
             <div class="tab-content" id="tab-page-content">
                 <div class="tab-pane fade show active" id="budget" role="tabpanel" aria-labelledby="budget-tab">
                    <Budget :budget="budget" />

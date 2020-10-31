@@ -1,11 +1,14 @@
 <template>
   <div>
-    <h5 v-if="showAll">All Accounts</h5>
-    <h5 v-else>{{account.name}}     
-      <button type="button" class="btn " @click="showEditModal"> 
-        <font-awesome-icon icon="edit" />
-      </button>
-    </h5>
+    <span> 
+      <h5 v-if="showAll">All Accounts</h5>
+      <h5 v-else>{{account.name}}     
+        <button type="button" class="btn " @click="showEditModal"> 
+          <font-awesome-icon icon="edit" />
+        </button>
+      </h5>
+
+    </span>
 
     <table class="table">
     <thead>
@@ -20,13 +23,13 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="transaction in transactions" v-bind:key="transaction.id">
-        <td v-if="showAll">{{transaction.account_name}}</td>
+      <tr v-for="transaction in transactions.slice(0,100)" v-bind:key="transaction.id">
+        <td v-if="showAll" style="max-width: 150px;">{{transaction.account_name}}</td>
         <td><font-awesome-icon icon="flag" :class="(transaction.flag_color || 'noflag')"/> </td>
         <td>{{transaction.date}}</td>
         <td>{{transaction.payee_name}}</td>
         <td>{{transaction.category_name}}</td>
-        <td>{{transaction.memo}}</td>
+        <td style="max-width: 150px">{{transaction.memo}}</td>
         <td class="currency text-right" v-bind:class="{ 'red': transaction.amount < 0 }">{{millisToCurrency(transaction.amount)}}</td>
       </tr>
     </tbody>
@@ -66,7 +69,7 @@ export default {
           return [];
 
         if( !this.viewState)
-          return this.budget.transactions.slice(0,100);
+          return this.budget.transactions;
         else 
           return this.budget.transactions.filter(x => x.account_id == this.viewState.id);
         }

@@ -10,3 +10,33 @@
   .category-group {
     font-weight: bold;
   }
+  
+#sidebar-menu {
+  max-width: fit-content;
+}
+/* 
+.tableFixHead {
+  overflow-y: auto;
+  height: 500px;
+}
+.tableFixHead span h5{
+  position: sticky;
+  top: 0;
+}
+.tableFixHead thead th {
+  position: sticky;
+  top: 45px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+th,
+td {
+  padding: 8px 16px;
+  border: 1px solid #ccc;
+}
+th {
+  background: #eee;
+} */
