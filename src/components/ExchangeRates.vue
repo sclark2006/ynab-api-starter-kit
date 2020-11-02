@@ -7,11 +7,11 @@
         <th>Entity</th>
         <th>Buying Rate</th>
         <th>Selling Rate</th>
-        <th>Las Updated</th>
+        <th>Last Updated</th>
       </tr>
     </thead>
     <tbody>
-      <tr v-for="rate in rates" v-bind:key="rate.id">
+      <tr v-for="rate in ratesData.rates" v-bind:key="rate.id">
         <td>{{rate.entity}}</td>
         <td class="text-right">{{rate.buying_rate}}</td>
         <td class="text-right">{{rate.selling_rate}}</td>
@@ -24,19 +24,7 @@
 
 <script>
 
-import * as infoDolar from  "../utils/infoDolarRates.js";
 export default {
-  data() {
-    return {
-        rates: []
-    }
-  },
-  created() {
-      infoDolar.loadRates()
-      .then(resp => this.rates = resp)
-      .catch(error => console.log(error));
-
-  }
- 
+  props: ["ratesData"]
 }
 </script>

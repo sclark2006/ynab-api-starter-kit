@@ -18,19 +18,21 @@
         :selectBudget="loadBudget"
         :logout="resetToken"
       />
-      <PageContent :budget="budgetData.currentBudget" :viewState="viewState" />
+      <PageContent :budget="budgetData.currentBudget" :ratesData="budgetData.ratesData" :viewState="viewState" />
     </Authorization>
     <Footer />
   </div>
 </template>
 <script>
 import auth from "../utils/auth.js";
+import currencyRates from  "../utils/currencyRates.js";
+// Import our config for YNAB
+import config from "../config.json";
+
 
 // Hooray! Here comes YNAB!
 import * as ynab from "ynab";
 
-// Import our config for YNAB
-import config from "../config.json";
 
 // Import Our Components to Compose Our App
 import Authorization from "./Authorization.vue";
@@ -57,10 +59,15 @@ export default {
         budgets: [],
         accounts: [],
         transactions: [],
+        ratesData: {
+          rates: [],
+          aggregate: {
+            avg_buying_rate: 0,
+            avg_selling_rate: 0
+          }
+        }
       },
-      viewState: {
-        currentView: "budget",
-      },
+      viewState: { currentView: "budget"},
     };
   },
   // When this component is created, check whether we need to get a token,
@@ -89,12 +96,15 @@ export default {
         })
         .then((budget) => this.loadTransactions(budget))
         //.then((budget) => this.loadCategories(budget))
-        .then((budget) => (this.budgetData.currentBudget = budget))
+        .then((budget) => this.budgetData.currentBudget = budget)
+        .then(() => Promise.resolve(currencyRates.loadRates()))
+        .then((ratesData) => this.setupRates(ratesData))
+        .then((ratesData) => this.setupAccountsCurrencies(this.budgetData.currentBudget, ratesData))
         .catch((err) => {
           if (err.error && err.error.detail) this.error = err.error.detail;
           else this.error = err;
         })
-        .finally(() => {
+        .finally(x => {
           this.loading = false;
         });
     },
@@ -118,7 +128,27 @@ export default {
         return Promise.resolve(budget);
       });
     },
-
+    setupRates(ratesData) {
+      this.budgetData.ratesData = ratesData;
+      return Promise.resolve(ratesData);
+    },
+    setupAccountsCurrencies(budget, ratesData) {
+      for(var account of budget.accounts) {
+        let rateInfo = currencyRates.currencyRateInfo(account, budget.currency_format);
+        if(!rateInfo) continue;
+        if(rateInfo.bank && rateInfo.rate === 0) {
+          if(rateInfo.bank.toLowerCase() === 'cash') {
+            rateInfo.rate = {
+              buying_rate: ratesData.aggregate.avg_buying_rate.toFixed(2),
+              selling_rate: ratesData.aggregate.avg_selling_rate.toFixed(2)
+            }
+          } else {
+            rateInfo.rate = ratesData.rates.find(r => r.entity.toLowerCase() === rateInfo.bank.toLowerCase());
+          }
+        } 
+        account.currencyRateInfo = rateInfo;
+      }
+    },
     loadAllBudgets() {
       this.loading = true;
       this.error = null;
@@ -129,9 +159,6 @@ export default {
         })
         .catch((err) => {
           this.error = err.error.detail;
-        })
-        .finally(() => {
-          this.loading = false;
         });
     },
 
